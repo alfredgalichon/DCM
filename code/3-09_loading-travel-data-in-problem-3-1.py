@@ -1,8 +1,8 @@
 import numpy as np, pandas as pd
 #
 def load_travel_data():
-  thepath = 'https://raw.githubusercontent.com/math-econ-code/mec_datasets/main/demand_travelmode/'
-  the_data = pd.read_csv(thepath+'travelmodedata.csv')
+  thepath ='https://raw.githubusercontent.com/math-econ-code/'
+  thepath += 'mec_datasets/main/demand_travelmode/'  the_data = pd.read_csv(thepath+'travelmodedata.csv')
   pihat_iy = np.where(the_data['choice'] =='yes' , 1, 0)
   Y = the_data['mode'].nunique()
   I = the_data.shape[0] // Y
