@@ -1,8 +1,8 @@
 # Multinomial logistic regression w L1 regularization
 #
 # Importing libraries and generating data :
-import numpy as np , scipy . sparse as sp
-np . random . seed (7)
+import numpy as np, scipy.sparse as sp
+np.random.seed (7)
 I ,Y , K = 100 ,5 ,3
 muhat_iy = np.random.multinomial(1,[1/ Y]* Y, size =I).flatten()
 phi_iy_k = np.random.normal(size = (I*Y, K))
