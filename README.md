@@ -1,2 +1,1 @@
-# MMDCM
-Online material for Mathematical Methods of Discrete Choice
+# Online material for ** Discrete Choice Models **
