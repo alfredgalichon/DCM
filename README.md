@@ -1,1 +1,1 @@
-# Online material for ** Discrete Choice Models **
+# Online material for **Discrete Choice Models**
