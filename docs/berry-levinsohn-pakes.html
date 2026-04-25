@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>dc05_blp</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>dc05_berry-levinsohn-pakes</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7312,6 +7312,7 @@ a.anchor-link {
                     processEnvironments: true
                 },
                 displayAlign: 'center',
+                messageStyle: 'none',
                 CommonHTML: {
                     linebreaks: {
                     automatic: true
@@ -7331,7 +7332,12 @@ a.anchor-link {
     if (!diagrams.length) {
       return;
     }
-    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs")).default;
+    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.0/mermaid.esm.min.mjs")).default;
+    const elkUrl = "https://cdnjs.cloudflare.com/ajax/libs/mermaid-layout-elk/0.1.9/mermaid-layout-elk.esm.min.mjs";
+    if(elkUrl) {
+      const elkLayouts = (await import(elkUrl)).default;
+      mermaid.registerLayoutLoaders(elkLayouts);
+    }
     const parser = new DOMParser();
 
     mermaid.initialize({
@@ -7428,7 +7434,8 @@ a.anchor-link {
      * Post-process to ensure mermaid diagrams contain only valid SVG and XHTML.
      */
     function cleanMermaidSvg(svg) {
-      return svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
+      svg = svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
+      return `${SVG_XML_HEADER}${svg}`;
     }
 
 
@@ -7454,6 +7461,285 @@ a.anchor-link {
       }
       return `<${tag} ${rest}>`;
     }
+
+
+  /**
+   * Named HTML entities with their decimal equivalent codes.
+   *
+   * @see https://www.w3.org/TR/WD-html40-970708/sgml/entities.html
+   * */
+  const HTML_ENTITIES = `<!ENTITY Aacute "&#193;">
+<!ENTITY aacute "&#225;">
+<!ENTITY Acirc "&#194;">
+<!ENTITY acirc "&#226;">
+<!ENTITY acute "&#180;">
+<!ENTITY AElig "&#198;">
+<!ENTITY aelig "&#230;">
+<!ENTITY Agrave "&#192;">
+<!ENTITY agrave "&#224;">
+<!ENTITY alefsym "&#8501;">
+<!ENTITY Alpha "&#913;">
+<!ENTITY alpha "&#945;">
+<!ENTITY amp "&#38;">
+<!ENTITY and "&#8869;">
+<!ENTITY ang "&#8736;">
+<!ENTITY Aring "&#197;">
+<!ENTITY aring "&#229;">
+<!ENTITY asymp "&#8776;">
+<!ENTITY Atilde "&#195;">
+<!ENTITY atilde "&#227;">
+<!ENTITY Auml "&#196;">
+<!ENTITY auml "&#228;">
+<!ENTITY bdquo "&#8222;">
+<!ENTITY Beta "&#914;">
+<!ENTITY beta "&#946;">
+<!ENTITY brvbar "&#166;">
+<!ENTITY bull "&#8226;">
+<!ENTITY cap "&#8745;">
+<!ENTITY Ccedil "&#199;">
+<!ENTITY ccedil "&#231;">
+<!ENTITY cedil "&#184;">
+<!ENTITY cent "&#162;">
+<!ENTITY Chi "&#935;">
+<!ENTITY chi "&#967;">
+<!ENTITY circ "&#710;">
+<!ENTITY clubs "&#9827;">
+<!ENTITY cong "&#8773;">
+<!ENTITY copy "&#169;">
+<!ENTITY crarr "&#8629;">
+<!ENTITY cup "&#8746;">
+<!ENTITY curren "&#164;">
+<!ENTITY dagger "&#8224;">
+<!ENTITY Dagger "&#8225;">
+<!ENTITY darr "&#8595;">
+<!ENTITY dArr "&#8659;">
+<!ENTITY deg "&#176;">
+<!ENTITY Delta "&#916;">
+<!ENTITY delta "&#948;">
+<!ENTITY diams "&#9830;">
+<!ENTITY divide "&#247;">
+<!ENTITY Eacute "&#201;">
+<!ENTITY eacute "&#233;">
+<!ENTITY Ecirc "&#202;">
+<!ENTITY ecirc "&#234;">
+<!ENTITY Egrave "&#200;">
+<!ENTITY egrave "&#232;">
+<!ENTITY empty "&#8709;">
+<!ENTITY emsp "&#8195;">
+<!ENTITY ensp "&#8194;">
+<!ENTITY epsilon "&#949;">
+<!ENTITY Epsilon "&#917;">
+<!ENTITY equiv "&#8801;">
+<!ENTITY Eta "&#919;">
+<!ENTITY eta "&#951;">
+<!ENTITY ETH "&#208;">
+<!ENTITY eth "&#240;">
+<!ENTITY Euml "&#203;">
+<!ENTITY euml "&#235;">
+<!ENTITY exist "&#8707;">
+<!ENTITY fnof "&#402;">
+<!ENTITY forall "&#8704;">
+<!ENTITY frac12 "&#189;">
+<!ENTITY frac14 "&#188;">
+<!ENTITY frac34 "&#190;">
+<!ENTITY frasl "&#8260;">
+<!ENTITY Gamma "&#915;">
+<!ENTITY gamma "&#947;">
+<!ENTITY ge "&#8805;">
+<!ENTITY gt "&#62;">
+<!ENTITY harr "&#8596;">
+<!ENTITY hArr "&#8660;">
+<!ENTITY hearts "&#9829;">
+<!ENTITY hellip "&#8230;">
+<!ENTITY Iacute "&#205;">
+<!ENTITY iacute "&#237;">
+<!ENTITY Icirc "&#206;">
+<!ENTITY icirc "&#238;">
+<!ENTITY iexcl "&#161;">
+<!ENTITY Igrave "&#204;">
+<!ENTITY igrave "&#236;">
+<!ENTITY image "&#8465;">
+<!ENTITY infin "&#8734;">
+<!ENTITY int "&#8747;">
+<!ENTITY Iota "&#921;">
+<!ENTITY iota "&#953;">
+<!ENTITY iquest "&#191;">
+<!ENTITY isin "&#8712;">
+<!ENTITY Iuml "&#207;">
+<!ENTITY iuml "&#239;">
+<!ENTITY Kappa "&#922;">
+<!ENTITY kappa "&#954;">
+<!ENTITY Lambda "&#923;">
+<!ENTITY lambda "&#955;">
+<!ENTITY lang "&#9001;">
+<!ENTITY laquo "&#171;">
+<!ENTITY larr "&#8592;">
+<!ENTITY lArr "&#8656;">
+<!ENTITY lceil "&#8968;">
+<!ENTITY ldquo "&#8220;">
+<!ENTITY le "&#8804;">
+<!ENTITY lfloor "&#8970;">
+<!ENTITY lowast "&#8727;">
+<!ENTITY loz "&#9674;">
+<!ENTITY lrm "&#8206;">
+<!ENTITY lsaquo "&#8249;">
+<!ENTITY lsquo "&#8216;">
+<!ENTITY lt "&#60;">
+<!ENTITY macr "&#175;">
+<!ENTITY mdash "&#8212;">
+<!ENTITY micro "&#181;">
+<!ENTITY middot "&#183;">
+<!ENTITY minus "&#8722;">
+<!ENTITY Mu "&#924;">
+<!ENTITY mu "&#956;">
+<!ENTITY nabla "&#8711;">
+<!ENTITY nbsp "&#160;">
+<!ENTITY ndash "&#8211;">
+<!ENTITY ne "&#8800;">
+<!ENTITY ni "&#8715;">
+<!ENTITY not "&#172;">
+<!ENTITY notin "&#8713;">
+<!ENTITY nsub "&#8836;">
+<!ENTITY Ntilde "&#209;">
+<!ENTITY ntilde "&#241;">
+<!ENTITY Nu "&#925;">
+<!ENTITY nu "&#957;">
+<!ENTITY Oacute "&#211;">
+<!ENTITY oacute "&#243;">
+<!ENTITY Ocirc "&#212;">
+<!ENTITY ocirc "&#244;">
+<!ENTITY OElig "&#338;">
+<!ENTITY oelig "&#339;">
+<!ENTITY Ograve "&#210;">
+<!ENTITY ograve "&#242;">
+<!ENTITY oline "&#8254;">
+<!ENTITY Omega "&#937;">
+<!ENTITY omega "&#969;">
+<!ENTITY Omicron "&#927;">
+<!ENTITY omicron "&#959;">
+<!ENTITY oplus "&#8853;">
+<!ENTITY or "&#8870;">
+<!ENTITY ordf "&#170;">
+<!ENTITY ordm "&#186;">
+<!ENTITY Oslash "&#216;">
+<!ENTITY oslash "&#248;">
+<!ENTITY Otilde "&#213;">
+<!ENTITY otilde "&#245;">
+<!ENTITY otimes "&#8855;">
+<!ENTITY Ouml "&#214;">
+<!ENTITY ouml "&#246;">
+<!ENTITY para "&#182;">
+<!ENTITY part "&#8706;">
+<!ENTITY permil "&#8240;">
+<!ENTITY perp "&#8869;">
+<!ENTITY Phi "&#934;">
+<!ENTITY phi "&#966;">
+<!ENTITY Pi "&#928;">
+<!ENTITY pi "&#960;">
+<!ENTITY piv "&#982;">
+<!ENTITY plusmn "&#177;">
+<!ENTITY pound "&#163;">
+<!ENTITY prime "&#8242;">
+<!ENTITY Prime "&#8243;">
+<!ENTITY prod "&#8719;">
+<!ENTITY prop "&#8733;">
+<!ENTITY Psi "&#936;">
+<!ENTITY psi "&#968;">
+<!ENTITY quot "&#34;">
+<!ENTITY radic "&#8730;">
+<!ENTITY rang "&#9002;">
+<!ENTITY raquo "&#187;">
+<!ENTITY rarr "&#8594;">
+<!ENTITY rArr "&#8658;">
+<!ENTITY rceil "&#8969;">
+<!ENTITY rdquo "&#8221;">
+<!ENTITY real "&#8476;">
+<!ENTITY reg "&#174;">
+<!ENTITY rfloor "&#8971;">
+<!ENTITY Rho "&#929;">
+<!ENTITY rho "&#961;">
+<!ENTITY rlm "&#8207;">
+<!ENTITY rsaquo "&#8250;">
+<!ENTITY rsquo "&#8217;">
+<!ENTITY sbquo "&#8218;">
+<!ENTITY Scaron "&#352;">
+<!ENTITY scaron "&#353;">
+<!ENTITY sdot "&#8901;">
+<!ENTITY sect "&#167;">
+<!ENTITY shy "&#173;">
+<!ENTITY Sigma "&#931;">
+<!ENTITY sigma "&#963;">
+<!ENTITY sigmaf "&#962;">
+<!ENTITY sim "&#8764;">
+<!ENTITY spades "&#9824;">
+<!ENTITY sub "&#8834;">
+<!ENTITY sube "&#8838;">
+<!ENTITY sum "&#8721;">
+<!ENTITY sup "&#8835;">
+<!ENTITY sup1 "&#185;">
+<!ENTITY sup2 "&#178;">
+<!ENTITY sup3 "&#179;">
+<!ENTITY supe "&#8839;">
+<!ENTITY szlig "&#223;">
+<!ENTITY Tau "&#932;">
+<!ENTITY tau "&#964;">
+<!ENTITY there4 "&#8756;">
+<!ENTITY Theta "&#920;">
+<!ENTITY theta "&#952;">
+<!ENTITY thetasym "&#977;">
+<!ENTITY thinsp "&#8201;">
+<!ENTITY THORN "&#222;">
+<!ENTITY thorn "&#254;">
+<!ENTITY tilde "&#732;">
+<!ENTITY times "&#215;">
+<!ENTITY trade "&#8482;">
+<!ENTITY Uacute "&#218;">
+<!ENTITY uacute "&#250;">
+<!ENTITY uarr "&#8593;">
+<!ENTITY uArr "&#8657;">
+<!ENTITY Ucirc "&#219;">
+<!ENTITY ucirc "&#251;">
+<!ENTITY Ugrave "&#217;">
+<!ENTITY ugrave "&#249;">
+<!ENTITY uml "&#168;">
+<!ENTITY upsih "&#978;">
+<!ENTITY Upsilon "&#933;">
+<!ENTITY upsilon "&#965;">
+<!ENTITY Uuml "&#220;">
+<!ENTITY uuml "&#252;">
+<!ENTITY weierp "&#8472;">
+<!ENTITY Xi "&#926;">
+<!ENTITY xi "&#958;">
+<!ENTITY Yacute "&#221;">
+<!ENTITY yacute "&#253;">
+<!ENTITY yen "&#165;">
+<!ENTITY Yuml "&#376;">
+<!ENTITY yuml "&#255;">
+<!ENTITY Zeta "&#918;">
+<!ENTITY zeta "&#950;">
+<!ENTITY zwj "&#8205;">
+<!ENTITY zwnj "&#8204;">`.replace(/\n/g, ' ');
+
+  /**
+   * A reasonably strict xml declaration.
+   */
+  const XML_DECL = '<?xml version="1.0" standalone="no"?>';
+
+  /**
+   * The beginning of the XML doctype declaration.
+   */
+  const DOCTYPE_START = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [`;
+
+  /**
+   * The end of the XML docype declaration.
+   */
+  const DOCTYPE_END = ']>';
+
+  /**
+   * A full header for an SVG XML document.
+   */
+  const SVG_XML_HEADER = `${XML_DECL}
+    ${DOCTYPE_START}${HTML_ENTITIES}${DOCTYPE_END}`;
 
     void Promise.all([...diagrams].map(renderOneMarmaid));
   });
@@ -7516,9 +7802,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Berry-Levinsohn-Pakes"><center>Berry-Levinsohn-Pakes</center><a class="anchor-link" href="#Berry-Levinsohn-Pakes">¶</a></h1><h3 id="Alfred-Galichon-(NYU-&amp;-Sciences-Po)"><center>Alfred Galichon (NYU &amp; Sciences Po)</center><a class="anchor-link" href="#Alfred-Galichon-(NYU-&amp;-Sciences-Po)">¶</a></h3><h2 id="'math+econ+code'-masterclass-series"><center>'math+econ+code' masterclass series</center><a class="anchor-link" href="#'math+econ+code'-masterclass-series">¶</a></h2><h4 id="With-python-code-examples"><center>With python code examples</center><a class="anchor-link" href="#With-python-code-examples">¶</a></h4><p>© 2018–2025 by Alfred Galichon. Past and present support from ERC grant CoG-866274 are acknowledged, as well as inputs from contributors listed <a href="http://www.math-econ-code.org/team">here</a>.</p>
+<h1 id="The-BLP-framework-for-demand-estimation"><center>The BLP framework for demand estimation</center><a class="anchor-link" href="#The-BLP-framework-for-demand-estimation">¶</a></h1><h3 id="Alfred-Galichon-(NYU-&amp;-Sciences-Po)-and-Ugo-Arena-(Sciences-Po)"><center>Alfred Galichon (NYU &amp; Sciences Po) and Ugo Arena (Sciences Po)</center><a class="anchor-link" href="#Alfred-Galichon-(NYU-&amp;-Sciences-Po)-and-Ugo-Arena-(Sciences-Po)">¶</a></h3><h2 id="'math+econ+code'-masterclass-series"><center>'math+econ+code' masterclass series</center><a class="anchor-link" href="#'math+econ+code'-masterclass-series">¶</a></h2><h4 id="With-python-code-examples"><center>With python code examples</center><a class="anchor-link" href="#With-python-code-examples">¶</a></h4><p>© 2018-2026 by Alfred Galichon. Past and present support from NSF grant DMS-1716489, ERC grant CoG-866274 are acknowledged, as well as inputs from contributors listed <a href="http://www.math-econ-code.org/team">here</a>.</p>
 <p><strong>If you reuse material from this masterclass, please cite as:</strong><br/>
-Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-econ-code.org/">https://www.math-econ-code.org/</a></p>
+Alfred Galichon, 'math+econ+code' masterclass. <a href="https://github.com/math-econ-code/mec_notebooks">https://github.com/math-econ-code/mec_notebooks</a></p>
 </div>
 </div>
 </div>
@@ -7529,25 +7815,26 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Learning-objectives">Learning objectives<a class="anchor-link" href="#Learning-objectives">¶</a></h3><ul>
-<li>The Berry-Levinsohn-Pakes method based on the paper's original data.</li>
+<h3 id="Learning-Objectives">Learning Objectives<a class="anchor-link" href="#Learning-Objectives">¶</a></h3><ul>
+<li><p>Understand the logic of the Berry–Levinsohn–Pakes framework for estimating differentiated-products demand with random coefficients.</p>
+</li>
+<li><p>Learn how market shares, mean utilities, and unobserved heterogeneity are linked in the BLP inversion and estimation procedure.</p>
+</li>
+<li><p>Implement a simple synthetic-data version of BLP step by step, including the numerical routines used to recover model objects.</p>
+</li>
+<li><p>Use <code>pyblp</code> to estimate a standard automobile-demand specification and interpret the resulting demand and supply estimates.</p>
+</li>
 </ul>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h3 id="References">References<a class="anchor-link" href="#References">¶</a></h3><ul>
-<li><p>Berry, Levinsohn, and Pakes (1995). "Automobile Prices in Market Equilibrium," <em>Econometrica</em></p>
+<li><p>Berry, S., Levinsohn, J., and Pakes, A. (1995). “Automobile Prices in Market Equilibrium.” <em>Econometrica</em>, 63(4), 841–890.</p>
 </li>
-<li><p>Galichon (2026). <em>Discrete Choice Models</em>, Chapter 4.4, Princeton University Press</p>
+<li><p>Nevo, A. (2000). “A Practitioner’s Guide to Estimation of Random-Coefficients Logit Models of Demand.” <em>Journal of Economics &amp; Management Strategy</em>, 9(4), 513–548.</p>
 </li>
-<li><p>Bonnet, Galichon, O'Hara and Shum (2017). "Yogurts choose consumers? Identification of Random Utility Models via Two-Sided Matching". Working paper.</p>
+<li><p>Conlon, C., and Gortmaker, J. (2020). “Best Practices for Differentiated Products Demand Estimation with PyBLP.” <em>RAND Journal of Economics</em>, 51(4), 1108–1161.</p>
+</li>
+<li><p>Conlon, C., and Gortmaker, J. (2025). “Incorporating Micro Data into Differentiated Products Demand Estimation with PyBLP.” <em>Journal of Econometrics</em>.</p>
+</li>
+<li><p>Galichon, A. (2026). <em>Discrete Choice Models: Mathematical Methods, Econometrics, and Data Science.</em> Princeton University Press.</p>
 </li>
 </ul>
 </div>
@@ -7560,11 +7847,23 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Libraries">Libraries<a class="anchor-link" href="#Libraries">¶</a></h3><p>Let's start by loading the libraries we shall need for this course.</p>
+<h1 id="A-Cornerstone-in-Structural-Estimation:-BLP's-method"><strong>A Cornerstone in Structural Estimation: BLP's method</strong><a class="anchor-link" href="#A-Cornerstone-in-Structural-Estimation:-BLP's-method">¶</a></h1><p>This notebook introduces the <strong>Berry, Levinsohn, and Pakes (BLP) estimation method</strong>. We begin by applying the method to a simple, randomly generated dataset, before using the <strong>PyBLP library</strong> to replicate the results of the automobile problem from the original paper. A rigorous explanation of the BLP method is available for interested readers in Alfred Galichon's <em>Discrete Choice Models</em> (DCM) book, which we refer to for the material.</p>
+<p>BLP's paper original took on the central question of <strong>how to estimate consumer demand and measure market power in the U.S. automobile market</strong>, a prime example of a market for differentiated products. The BLP method has then become an industry standard in empirical industrial organization and structural econometrics. It is extensively used to model demand for differentiated products such as cars, computers, food, and healthcare. At its core, BLP models the demand side using a random coefficient logit to capture unobserved heterogeneity. It addresses potential endogeneity—specifically, unobserved product characteristics (like quality or reputation) that correlate with price—through an IV-GMM approach. Finally, the method closes the model with a supply-side equilibrium based on oligopolistic (Bertrand) competition.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>First, let's install some libraries that are not default (in particular in Colab).</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7572,11 +7871,27 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#pip install mec</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="c1">#import tabulate as tb</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>PyBLP
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Requirement already satisfied: PyBLP in /usr/local/lib/python3.12/dist-packages (1.2.0)
+Requirement already satisfied: numpy&gt;=1.17.0 in /usr/local/lib/python3.12/dist-packages (from PyBLP) (2.0.2)
+Requirement already satisfied: patsy&gt;=0.5.1 in /usr/local/lib/python3.12/dist-packages (from PyBLP) (1.0.2)
+Requirement already satisfied: pyhdfe&gt;=0.1.0 in /usr/local/lib/python3.12/dist-packages (from PyBLP) (0.2.0)
+Requirement already satisfied: scipy&gt;=1.2.0 in /usr/local/lib/python3.12/dist-packages (from PyBLP) (1.16.3)
+Requirement already satisfied: sympy&gt;=1.1.0 in /usr/local/lib/python3.12/dist-packages (from PyBLP) (1.14.0)
+Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /usr/local/lib/python3.12/dist-packages (from sympy&gt;=1.1.0-&gt;PyBLP) (1.3.0)
+</pre>
 </div>
 </div>
 </div>
@@ -7588,7 +7903,7 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Preparing-the-data">Preparing the data<a class="anchor-link" href="#Preparing-the-data">¶</a></h1><p>Now we load BLP's dataset here. We will create instruments at the same time, so we need an auxiliary function, <code>create_blp_instruments</code>.</p>
+<p>Then we import the libraries we'll need.</p>
 </div>
 </div>
 </div>
@@ -7600,25 +7915,16 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 <div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">create_blp_instruments</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mkts_firms_prods</span><span class="p">,</span><span class="n">include_ones</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">include_arguments</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">):</span>
-    <span class="k">if</span> <span class="n">include_ones</span><span class="p">:</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)),</span> <span class="n">X</span> <span class="p">]]</span> <span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-    <span class="n">df</span><span class="p">[</span> <span class="n">names</span> <span class="p">]</span><span class="o">=</span><span class="n">X</span>
-    <span class="n">df</span><span class="p">[[</span><span class="s1">'mkt'</span><span class="p">,</span><span class="s1">'firm'</span><span class="p">,</span><span class="s1">'prod'</span><span class="p">]]</span> <span class="o">=</span> <span class="n">mkts_firms_prods</span>
-    <span class="n">thelist1</span><span class="p">,</span> <span class="n">thelist2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">theserie</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span> <span class="n">names</span> <span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">thelist1</span><span class="o">.</span><span class="n">append</span> <span class="p">([</span><span class="n">theserie</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">'mkt'</span><span class="p">]</span><span class="o">==</span><span class="n">df</span><span class="p">[</span><span class="s1">'mkt'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;</span> 
-                                <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'firm'</span><span class="p">]</span><span class="o">==</span><span class="n">df</span><span class="p">[</span><span class="s1">'firm'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;</span> 
-                                <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'prod'</span><span class="p">]</span><span class="o">!=</span><span class="n">df</span><span class="p">[</span><span class="s1">'prod'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>  <span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">coo_array</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyblp</span>
 
-        <span class="n">thelist2</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">theserie</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">'mkt'</span><span class="p">]</span><span class="o">==</span><span class="n">df</span><span class="p">[</span><span class="s1">'mkt'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;</span> 
-                                <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'firm'</span><span class="p">]</span><span class="o">!=</span><span class="n">df</span><span class="p">[</span><span class="s1">'firm'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">])</span>
-    <span class="k">if</span> <span class="n">include_arguments</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([[</span><span class="n">X</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">thelist1</span><span class="o">+</span><span class="n">thelist2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">]])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">thelist1</span><span class="o">+</span><span class="n">thelist2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">pyblp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </div>
@@ -7631,7 +7937,129 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The following function loads BLP's car data proper.</p>
+<h1 id="Dimensions,-Required-Data-&amp;-Parameters-to-be-estimated"><strong>Dimensions, Required Data &amp; Parameters to be estimated</strong><a class="anchor-link" href="#Dimensions,-Required-Data-&amp;-Parameters-to-be-estimated">¶</a></h1><p>We begin by introducing the needed <strong>data</strong> to run the BLP method. The dataset is a panel of differentiated products indexed by $ty$, where $t \in [T]$ denotes markets and $y \in [Y]$ denotes products. For each index $ty$, the econometrician observes a vector of endogenous product characteristics $\phi^e_{ty,k_e}$ for $k_e \in [K_e]$, a vector of exogenous characteristics $\phi^x_{ty,k_x}$ for $k_x \in [K_x]$, a vector of instruments $\zeta_{ty,k_z}$ for $k_z \in [K_z]$, the price $p_{ty}$, and the realized market share $\hat{\pi}_{ty}$.</p>
+<p>Consumer heterogeneity is introduced through random coefficients. Each individual $i \in [I]$ is endowed with a vector of random characteristics $\eta_{im}$ for $m \in [M]$. These interact with the vector of product characteristics $\xi_{tym}$ through the matrix of coefficients $\Psi$, while $\chi$ collects the corresponding mean coefficients. This random utility specification generates flexible substitution patterns across products.</p>
+<p>On the supply side, ownership is summarized by the dummy variable $H$, equal to one when two products are controlled by the same firm, and zero otherwise. This ownership structure will matter when recovering markups and marginal costs.</p>
+<p>The objective of the BLP procedure is to recover the structural demand parameters from observed market shares, while controlling for the endogeneity of the characteristics $\phi^e_{ty,k_e}$ by means of the instruments $\zeta_{ty,k_z}$.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The objects, as well as their respective sizes, are as follows:</p>
+<p>$$
+\begin{array}{l @{\quad} l @{\qquad} l}
+\hline
+\textbf{Object} &amp; \textbf{Size} &amp; \textbf{Description} \\
+\hline
+\hat{\pi} &amp; (TY, 1) &amp; \hat{\pi}_{ty} \text{ is the market share of product } y \text{ in market } t. \\
+p &amp; (TY, 1) &amp; p_{ty} \text{ is the price of product } y \text{ in market } t. \\
+\Phi^e &amp; (TY, K_e) &amp; \phi^e_{ty,k_e} \text{ is the } k_e\text{th observable demand-relevant endogenous characteristic.} \\
+\Phi^{e \prime} &amp; (TY, K_e) &amp; \phi^{e \prime}_{ty,k_e} = \partial \phi^e_{ty,k_e}/\partial p_{ty} \text{ is the price derivative of the previous quantity.} \\
+\Phi^x &amp; (TY, K_x) &amp; \phi^x_{ty,k_x} \text{ is the } k_x\text{th observable demand-relevant exogenous characteristic.} \\
+\eta &amp; (IM, 1) &amp; \eta_{im} \text{ is the } m\text{th entry of the random characteristics of individual } i. \\
+\xi &amp; (TYM, 1) &amp; \xi_{tym} \text{ is the } m\text{th entry of the characteristics of product } y \text{ interacting with } \eta. \\
+\xi^\prime &amp; (TYM, 1) &amp; \xi^\prime_{tym} = \partial \xi_{tym}/\partial p_y \text{ is the price derivative of the previous quantity.} \\
+\zeta &amp; (TY, D) &amp; \zeta_{ty,d} \text{ is the } d\text{th instrument for the demand for product } y \text{ in market } t. \\
+\Psi &amp; (TY, L) &amp; \psi_{ty,l} \text{ is the } l\text{th supply-relevant characteristic of product } y \text{ in market } t. \\
+H &amp; (TY, TY) &amp; H_{ty,t'y'} \text{ is 1 if } y \text{ and } y' \text{ are controlled by the same firm and } t=t', \text{ 0 otherwise.} \\
+\chi &amp; (TY, S) &amp; \chi_{ty,s} \text{ is the } s\text{th instrument for the supply for product } y \text{ in market } t.
+\end{array}
+\\
+$$</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Parameters-to-be-estimated"><strong>Parameters to be estimated</strong><a class="anchor-link" href="#Parameters-to-be-estimated">¶</a></h2><p>It is useful to introduce a few derived quantities built from the primitive data and parameter vectors.</p>
+<p>First, let
+$\Phi = \big[\Phi^e \ \ \Phi^x\big]$
+denote the full matrix of demand-relevant observable characteristics, and let
+$\lambda = (\alpha^\top,\beta^\top)^\top$
+collect the corresponding taste coefficients. The resulting <strong>systematic utility</strong> is then
+$U = \Phi \lambda = \Phi^e \alpha + \Phi^x \beta$.</p>
+<p>Next, the <strong>marginal cost</strong> is specified as
+$c = \Psi \gamma + \omega$,
+where $\Psi$ collects the observable supply-side characteristics, $\gamma$ is the associated coefficient vector, and $\omega$ is an unobserved cost shock.</p>
+<p>On the demand side, the vector
+$\theta = (\tau^\top,\alpha^\top)^\top$
+collects the <strong>nonlinear demand parameters</strong> in the GMM problem. In particular, $\tau$ governs the random-coefficient component of utility, while $\alpha$ enters this nonlinear block because it loads the endogenous characteristics.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>To summarize, here is the list of parameters to be estimated:</p>
+<p>$$
+\begin{array}{l @{\quad} l @{\qquad} l}
+\hline
+\textbf{Object} &amp; \textbf{Size} &amp; \textbf{Description} \\
+\hline
+\alpha &amp; (K_e, 1) &amp; \alpha \text{ parametrizes the endogenous part of the systematic consumer utility } \Phi^e \alpha. \\
+\beta &amp; (K_x, 1) &amp; \beta \text{ parametrizes the exogenous part of the systematic consumer utility } \Phi^x \beta. \\
+\lambda &amp; (K, 1) &amp; \lambda = (\alpha^\top, \beta^\top)^\top \text{ parametrizes the overall systematic utility } U = \Phi \lambda. \\
+\gamma &amp; (L, 1) &amp; \gamma_l \text{ parametrizes the seller cost } c = \Psi \gamma + \omega, \text{ where } \omega \text{ is a noise term.} \\
+\tau &amp; (M, 1) &amp; \tau_m \text{ parametrizes the idiosyncratic utility of the consumer, } \nu_\tau. \\
+\theta &amp; (N, 1) &amp; \theta = (\tau^\top, \alpha^\top)^\top \text{ is a nonlinear GMM parameter } (N = M + K_e).
+\end{array}
+$$</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Dimensions"><strong>Dimensions</strong><a class="anchor-link" href="#Dimensions">¶</a></h2><p>The market environment is structured around $T$ distinct markets, each containing $Y$ competing differentiated products. To approximate the distribution of consumer heterogeneity, the method relies on $I$ simulation points (representing simulated individuals), whose idiosyncratic tastes vary across $M$ different dimensions. Product utility is determined by a total of $K$ systematic characteristics, which are split into $K_e$ endogenous traits and $K_x$ exogenous traits. On the production side, marginal costs are defined by $L$ supply-relevant characteristics. Finally, the instrumental variable strategy relies on $D$ demand-side and $S$ supply-side instruments to resolve endogeneity, while the overall complexity of the numerical optimization is dictated by $N$, the total number of nonlinear GMM parameters being estimated ($N = M + K_e$).</p>
+<p>$$
+\begin{array}{1 @{\quad} 1}
+\hline
+\textbf{Object} &amp; \textbf{Description} \\
+\hline
+T &amp; \text{Number of markets.} \\
+Y &amp; \text{Number of products.} \\
+I &amp; \text{Number of simulation points.} \\
+M &amp; \text{Number of dimensions of idiosyncratic utility.} \\
+K_e &amp; \text{Number of endogenous demand-relevant systematic characteristics.} \\
+K_x &amp; \text{Number of exogenous demand-relevant systematic characteristics.} \\
+K &amp; \text{Number of demand systematic characteristics, } K = K_e + K_x. \\
+L &amp; \text{Number of supply-relevant characteristics.} \\
+D &amp; \text{Number of demand-side instruments.} \\
+S &amp; \text{Number of supply-side instruments.} \\
+N &amp; \text{Number of nonlinear parameters, } N = M + K_e.
+\end{array}
+\\
+$$</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Generating-our-(fake)-data"><strong>Generating our (fake) data</strong><a class="anchor-link" href="#Generating-our-(fake)-data">¶</a></h1><p>The following procedure generates fake data. It starts with the true parameters, builds demand-related attributed, and next, supply-related characteristics.</p>
 </div>
 </div>
 </div>
@@ -7643,359 +8071,53 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 <div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">load_blp_car_data</span><span class="p">(</span><span class="n">check_pyblp_compatibility</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Returns the data used by Berry, Levinsohn and Pakes (1999)</span>
-<span class="sd">    </span>
-<span class="sd">    output:</span>
-<span class="sd">        a pandas dataframe with product-level observations</span>
-<span class="sd">    """</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_standard_blp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">()</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">I</span> <span class="o">=</span> <span class="n">T</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">I</span>
+    <span class="n">true_beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span> <span class="c1"># Exogenous coefficients - parameters for Phi^e and Phi^x</span>
+    <span class="n">true_sigma</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1"># Heterogeneity parameter (Tau)</span>
 
-    <span class="n">thepath</span> <span class="o">=</span> <span class="s1">'https://raw.githubusercontent.com/math-econ-code/mec_pypi/refs/heads/main/mec/datasets/demand_blp/blp_1999/'</span>
-    <span class="kn">from</span> <span class="nn">mec.blp</span> <span class="kn">import</span> <span class="n">create_blp_instruments</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="c1">#The Exogenous Characteristics (Phi^x)</span>
+    <span class="n">cost_shifter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span> <span class="c1"># excluded Instrument</span>
 
-    <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">'name'</span><span class="p">,</span>       <span class="c1"># name: Model name</span>
-        <span class="s1">'car_ids'</span><span class="p">,</span>    <span class="c1"># car_ids: Identification number</span>
-        <span class="s1">'market_ids'</span><span class="p">,</span> <span class="c1"># market_ids: Year</span>
-        <span class="s1">'cy'</span><span class="p">,</span>         <span class="c1"># cy: Number of cylinders</span>
-        <span class="s1">'dr'</span><span class="p">,</span>         <span class="c1"># dr: Drive type (2 or 4)</span>
-        <span class="s1">'at'</span><span class="p">,</span>         <span class="c1"># at: Automatic transmission</span>
-        <span class="s1">'ps'</span><span class="p">,</span>         <span class="c1"># ps: Power steering</span>
-        <span class="s1">'air'</span><span class="p">,</span>        <span class="c1"># air: Air conditioning</span>
-        <span class="s1">'drv'</span><span class="p">,</span>        <span class="c1"># drv: Drive type (front wheel drive)</span>
-        <span class="s1">'prices'</span><span class="p">,</span>      <span class="c1"># price: Price in dollars</span>
-        <span class="s1">'wght'</span><span class="p">,</span>       <span class="c1"># wght: Weight in pounds</span>
-        <span class="s1">'dom'</span><span class="p">,</span>        <span class="c1"># dom: Domestic or imported</span>
-        <span class="s1">'disp'</span><span class="p">,</span>       <span class="c1"># disp: Displacement</span>
-        <span class="s1">'hp'</span><span class="p">,</span>         <span class="c1"># hp: Horsepower</span>
-        <span class="s1">'lngth'</span><span class="p">,</span>      <span class="c1"># lngth: Length in inches</span>
-        <span class="s1">'wdth'</span><span class="p">,</span>       <span class="c1"># wdth: Width in inches</span>
-        <span class="s1">'wb'</span><span class="p">,</span>         <span class="c1"># wb: Wheelbase in inches</span>
-        <span class="s1">'mpg'</span><span class="p">,</span>        <span class="c1"># mpg: Miles per gallon</span>
-        <span class="s1">'sales'</span><span class="p">,</span>      <span class="c1"># sales: Sales</span>
-        <span class="s1">'firm_ids'</span><span class="p">,</span>   <span class="c1"># fid: Firm ID</span>
-        <span class="s1">'eu'</span><span class="p">,</span>         <span class="c1"># eu: European model</span>
-        <span class="s1">'re'</span><span class="p">,</span>         <span class="c1"># re: Reliability index</span>
-        <span class="s1">'sales*'</span><span class="p">,</span>     <span class="c1"># unclear (probably related to foreign sales)</span>
-        <span class="s1">'dfi'</span><span class="p">,</span>        <span class="c1"># dfi: Transplant production in the U.S.</span>
-        <span class="s1">'ci'</span>          <span class="c1"># ci: captive imports against the voluntary export restraint (ver)</span>
-    <span class="p">]</span>
-    <span class="c1"># load data files</span>
-    <span class="n">prods</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">thepath</span><span class="o">+</span><span class="s1">'panel6.asc'</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s1">'\s+'</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">column_names</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">otherdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span> <span class="n">thepath</span> <span class="o">+</span> <span class="s1">'otherdat.asc'</span><span class="p">,</span> 
-                          <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s1">'\s+'</span><span class="p">,</span> 
-                          <span class="n">names</span><span class="o">=</span> <span class="p">[</span><span class="s1">'year'</span><span class="p">,</span><span class="s1">'size'</span><span class="p">,</span> <span class="s1">'meanly'</span> <span class="p">,</span><span class="s1">'cpi'</span> <span class="p">,</span><span class="s1">'gasprice'</span><span class="p">,</span> <span class="s1">'rmat1'</span><span class="p">,</span><span class="s1">'rmat2'</span><span class="p">,</span> 
-                                  <span class="s1">'nvec'</span><span class="p">,</span><span class="s1">'xx1'</span><span class="p">,</span><span class="s1">'xx2'</span><span class="p">,</span><span class="s1">'xx3'</span><span class="p">,</span><span class="s1">'xx4'</span><span class="p">,</span><span class="s1">'xx5'</span><span class="p">]</span> <span class="p">,</span>
-                          <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">otherdf3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span> <span class="n">thepath</span> <span class="o">+</span> <span class="s1">'otherdat3.asc'</span><span class="p">,</span> 
-                           <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s1">'\s+'</span><span class="p">,</span> 
-                           <span class="n">names</span><span class="o">=</span> <span class="p">[</span><span class="s1">'year'</span><span class="p">,</span><span class="s1">'size'</span><span class="p">,</span> <span class="s1">'meanly'</span> <span class="p">,</span><span class="s1">'cpi'</span> <span class="p">,</span><span class="s1">'gasprice'</span><span class="p">,</span> <span class="s1">'rmat1'</span><span class="p">,</span><span class="s1">'rmat2'</span><span class="p">,</span> 
-                                   <span class="s1">'nvec'</span><span class="p">,</span><span class="s1">'uswage'</span><span class="p">,</span><span class="s1">'gwage'</span><span class="p">,</span><span class="s1">'jwage'</span><span class="p">,</span><span class="s1">'dm'</span><span class="p">,</span> <span class="s1">'yen'</span><span class="p">,</span> <span class="s1">'gnp'</span> <span class="p">,</span> <span class="s1">'primer'</span><span class="p">],</span>
-                           <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">erates</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span> <span class="n">thepath</span> <span class="o">+</span> <span class="s1">'lagged_erate.asc'</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s1">'\s+'</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">'yenlag'</span><span class="p">,</span><span class="s1">'dmlag'</span><span class="p">]</span> <span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">nu_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="c1"># heterogeneity: Random Shocks (Eta_im)</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span> <span class="c1"># Unobserved Product Quality (xi_ty)</span>
 
-    <span class="n">unobs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">thepath</span><span class="o">+</span><span class="s1">'../gentzkow-shapiro/unobs_pub.csv'</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'all'</span><span class="p">)</span>
-    
-    
-    <span class="c1"># convert 1990 displacement from liters to cubic inches</span>
-    <span class="n">prods</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">90</span><span class="p">,</span> <span class="s1">'disp'</span><span class="p">]</span> <span class="o">=</span> <span class="n">prods</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">90</span><span class="p">,</span> <span class="s1">'disp'</span><span class="p">]</span> <span class="o">*</span> <span class="mf">61.02</span>
-    <span class="c1">#</span>
-    <span class="c1"># compute mile per dollar = mile per gallon / dollar per gallon</span>
-    <span class="n">adjustment_dic</span> <span class="o">=</span> <span class="p">{</span><span class="n">otherdf</span><span class="p">[</span><span class="s1">'year'</span><span class="p">][</span><span class="n">i</span><span class="p">]:</span> <span class="n">otherdf</span><span class="p">[</span><span class="s1">'cpi'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span><span class="p">(</span> <span class="mi">100</span><span class="o">*</span>  <span class="n">otherdf</span><span class="p">[</span><span class="s1">'gasprice'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">otherdf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">}</span>
-    <span class="n">mpd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">prods</span><span class="p">[</span><span class="s1">'mpg'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">adjustment_dic</span><span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">/</span> <span class="mi">10</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">prods</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">])</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'mpd'</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpd</span>
-    <span class="c1">#</span>
-    <span class="n">otherdf3</span><span class="p">[</span><span class="s1">'yenlag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">erates</span><span class="p">[</span><span class="s1">'yenlag'</span><span class="p">]</span>
-    <span class="n">otherdf3</span><span class="p">[</span><span class="s1">'dmlag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">erates</span><span class="p">[</span><span class="s1">'dmlag'</span><span class="p">]</span>
-    <span class="c1">#</span>
-    <span class="c1"># create market shares</span>
-    <span class="n">size_dic</span> <span class="o">=</span>  <span class="p">{</span><span class="n">otherdf3</span><span class="p">[</span><span class="s1">'year'</span><span class="p">][</span><span class="n">i</span><span class="p">]:</span> <span class="n">otherdf3</span><span class="p">[</span><span class="s1">'size'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">otherdf3</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">}</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'shares'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">prods</span><span class="p">[</span><span class="s1">'sales'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">size_dic</span><span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">prods</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">])</span>
+    <span class="c1"># Calculate rival characteristics to simulate a competitive market</span>
+    <span class="n">market_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">df_temp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'market_ids'</span><span class="p">:</span> <span class="n">market_ids</span><span class="p">,</span> <span class="s1">'x0'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">'x1'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]})</span>
+    <span class="n">rival_x0</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_temp</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'market_ids'</span><span class="p">)[</span><span class="s1">'x0'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)</span> <span class="o">-</span> <span class="n">df_temp</span><span class="p">[</span><span class="s1">'x0'</span><span class="p">])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">rival_x1</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_temp</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'market_ids'</span><span class="p">)[</span><span class="s1">'x1'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)</span> <span class="o">-</span> <span class="n">df_temp</span><span class="p">[</span><span class="s1">'x1'</span><span class="p">])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
-    <span class="c1"># deflate prices and rescale various quantities</span>
-    <span class="n">cpi_dic</span> <span class="o">=</span> <span class="p">{</span><span class="n">otherdf</span><span class="p">[</span><span class="s1">'year'</span><span class="p">][</span><span class="n">i</span><span class="p">]:</span> <span class="n">otherdf</span><span class="p">[</span><span class="s1">'cpi'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">otherdf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">}</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'prices'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'prices'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cpi_dic</span><span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">prods</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">]</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'sales'</span><span class="p">]</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'sales'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'wght'</span><span class="p">]</span> <span class="o">=</span><span class="n">prods</span><span class="p">[</span><span class="s1">'wght'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'hp'</span><span class="p">]</span> <span class="o">=</span><span class="n">prods</span><span class="p">[</span><span class="s1">'hp'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'disp'</span><span class="p">]</span> <span class="o">=</span><span class="n">prods</span><span class="p">[</span><span class="s1">'disp'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'lngth'</span><span class="p">]</span> <span class="o">=</span><span class="n">prods</span><span class="p">[</span><span class="s1">'lngth'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'wdth'</span><span class="p">]</span> <span class="o">=</span><span class="n">prods</span><span class="p">[</span><span class="s1">'wdth'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'wb'</span><span class="p">]</span> <span class="o">=</span><span class="n">prods</span><span class="p">[</span><span class="s1">'wb'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'mpg'</span><span class="p">]</span> <span class="o">=</span><span class="n">prods</span><span class="p">[</span><span class="s1">'mpg'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span>
-    <span class="c1">###################################</span>
-    <span class="c1"># build clustering ids</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'clustering_ids'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'name'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">prods</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">]</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
-        <span class="n">chars</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[</span><span class="n">prods</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span> <span class="p">][[</span><span class="s1">'market_ids'</span><span class="p">,</span><span class="s1">'car_ids'</span><span class="p">,</span><span class="s1">'hp'</span><span class="p">,</span><span class="s1">'lngth'</span><span class="p">,</span><span class="s1">'wdth'</span><span class="p">,</span><span class="s1">'wb'</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-        <span class="n">iref</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chars</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">chars</span><span class="p">[</span><span class="n">iref</span><span class="p">,</span><span class="mi">2</span><span class="p">:])</span> <span class="o">/</span>  <span class="p">(</span><span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">:]</span><span class="o">+</span><span class="n">chars</span><span class="p">[</span><span class="n">iref</span><span class="p">,</span><span class="mi">2</span><span class="p">:])</span> <span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">0.1</span><span class="p">:</span>
-                <span class="n">iref</span> <span class="o">=</span> <span class="n">i</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">prev_model_cid</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'car_ids'</span><span class="p">]</span> <span class="o">==</span> <span class="n">chars</span><span class="p">[</span><span class="n">iref</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="p">][</span><span class="s1">'clustering_ids'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">prods</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'car_ids'</span><span class="p">]</span> <span class="o">==</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span> <span class="s1">'clustering_ids'</span><span class="p">]</span><span class="o">=</span> <span class="n">prev_model_cid</span>
+    <span class="c1"># Endogeneity: Correlation between Price (Phi^e) and Quality (xi)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">p_ty</span> <span class="o">=</span> <span class="p">(</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.2</span> <span class="o">*</span> <span class="n">cost_shifter</span> <span class="o">+</span>
+        <span class="o">-</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">rival_x0</span> <span class="o">-</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">rival_x1</span> <span class="o">+</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">xi</span> <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">check_pyblp_compatibility</span><span class="p">:</span>
-        <span class="c1"># sometimes there are multiple products with the same name, same year; it is not clear how BLP treat that but the following </span>
-        <span class="c1"># ensures compatibility with pyblp by adjusting them manually</span>
-        <span class="n">cids_to_change</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1540</span><span class="p">:</span> <span class="s1">'TYCORO71'</span><span class="p">,</span> <span class="mi">1542</span><span class="p">:</span> <span class="s1">'TYCORO71'</span><span class="p">,</span> <span class="mi">1582</span><span class="p">:</span> <span class="s1">'TYCORO71'</span><span class="p">,</span> <span class="mi">560</span><span class="p">:</span> <span class="s1">'MCMONT73'</span><span class="p">,</span> <span class="mi">1084</span><span class="p">:</span> <span class="s1">'OD9878'</span><span class="p">,</span> <span class="mi">1230</span><span class="p">:</span> <span class="s1">'OD9878'</span><span class="p">,</span> 
-            <span class="mi">1854</span><span class="p">:</span> <span class="s1">'TYCORO78'</span><span class="p">,</span> <span class="mi">1384</span><span class="p">:</span> <span class="s1">'OD9880'</span><span class="p">,</span> <span class="mi">1867</span><span class="p">:</span> <span class="s1">'AD500080'</span><span class="p">,</span> <span class="mi">2410</span><span class="p">:</span> <span class="s1">'TYCORO81'</span><span class="p">,</span> <span class="mi">2424</span><span class="p">:</span> <span class="s1">'AD500081'</span><span class="p">,</span> <span class="mi">2451</span><span class="p">:</span> <span class="s1">'MB380S82'</span><span class="p">,</span>
-            <span class="mi">2511</span><span class="p">:</span> <span class="s1">'MB380S82'</span><span class="p">,</span> <span class="mi">3351</span><span class="p">:</span> <span class="s1">'DGCOLT85'</span><span class="p">,</span> <span class="mi">3434</span><span class="p">:</span> <span class="s1">'PTGRAN84'</span><span class="p">,</span> <span class="mi">3471</span><span class="p">:</span> <span class="s1">'MB380S85'</span><span class="p">,</span> <span class="mi">3648</span><span class="p">:</span> <span class="s1">'DGCOLT85'</span><span class="p">,</span> <span class="mi">3954</span><span class="p">:</span> <span class="s1">'DGCOLT86'</span><span class="p">,</span>
-            <span class="mi">4247</span><span class="p">:</span> <span class="s1">'DGCOLT87'</span><span class="p">,</span> <span class="mi">4316</span><span class="p">:</span> <span class="s1">'PTGRAN86'</span><span class="p">,</span><span class="mi">4485</span><span class="p">:</span> <span class="s1">'SA900089'</span><span class="p">,</span> <span class="mi">5517</span><span class="p">:</span> <span class="s1">'MB560S90'</span><span class="p">,</span> <span class="mi">5563</span><span class="p">:</span> <span class="s1">'SA900090'</span><span class="p">,</span> <span class="mi">5590</span><span class="p">:</span> <span class="s1">'PS911C90'</span><span class="p">}</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cids_to_change</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">prods</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'car_ids'</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">),</span> <span class="s1">'clustering_ids'</span><span class="p">]</span><span class="o">=</span> <span class="n">cids_to_change</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="c1">#</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1900</span><span class="o">+</span><span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">]</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'region'</span><span class="p">]</span><span class="o">=</span><span class="p">[</span> <span class="s1">'US'</span> <span class="k">if</span> <span class="p">(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'dom'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span>  <span class="s1">'EU'</span>  <span class="k">if</span> <span class="p">(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'eu'</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">else</span> <span class="s1">'JP'</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">prods</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>
-    <span class="c1">#prods['verdum']= 1 - prods['dom'] - prods['eu'] - pd.Series(np.where(prods['firm_ids'] == 21 , 1, 0)) - prods['dfi'] + prods['ci']</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'hpwt'</span><span class="p">]</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'hp'</span><span class="p">]</span> <span class="o">/</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'wght'</span><span class="p">]</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'space'</span><span class="p">]</span><span class="o">=</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'lngth'</span><span class="p">]</span> <span class="o">*</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'wdth'</span><span class="p">]</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'trend'</span><span class="p">]</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">]</span> <span class="o">-</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="c1">#</span>
-    <span class="n">mkts_firms_prods</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[[</span><span class="s1">'market_ids'</span><span class="p">,</span> <span class="s1">'firm_ids'</span><span class="p">,</span> <span class="s1">'car_ids'</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    <span class="n">instr_vals</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[[</span><span class="s1">'hpwt'</span><span class="p">,</span> <span class="s1">'air'</span><span class="p">,</span> <span class="s1">'mpd'</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    <span class="n">prods</span><span class="p">[[</span><span class="s1">'demand_instruments'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span> <span class="p">]</span> <span class="o">=</span> <span class="n">create_blp_instruments</span><span class="p">(</span><span class="n">instr_vals</span><span class="p">,</span><span class="n">mkts_firms_prods</span><span class="p">,</span><span class="n">include_ones</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">include_arguments</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">instr_vals</span> <span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'hpwt'</span><span class="p">]),</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'air'</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'mpg'</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">prods</span><span class="p">[</span><span class="s1">'space'</span><span class="p">])</span> <span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    <span class="n">prods</span><span class="p">[[</span><span class="s1">'supply_instruments'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span> <span class="p">]</span> <span class="o">=</span> <span class="n">create_blp_instruments</span><span class="p">(</span><span class="n">instr_vals</span><span class="p">,</span><span class="n">mkts_firms_prods</span><span class="p">,</span><span class="n">include_ones</span><span class="o">=</span><span class="kc">True</span> <span class="p">,</span> <span class="n">include_arguments</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">instr_vals</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'trend'</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">prods</span><span class="p">[[</span><span class="s1">'supply_instruments'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">]</span> <span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="n">create_blp_instruments</span><span class="p">(</span><span class="n">instr_vals</span><span class="p">,</span><span class="n">mkts_firms_prods</span><span class="p">,</span><span class="n">include_ones</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">include_arguments</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">prods</span><span class="p">[</span><span class="s1">'supply_instruments11'</span><span class="p">]</span> <span class="o">=</span> <span class="n">prods</span><span class="p">[</span><span class="s1">'mpd'</span><span class="p">]</span>
-    <span class="c1"># now, prepare agent data</span>
-    <span class="n">mean_incomes_t</span> <span class="o">=</span> <span class="n">otherdf3</span><span class="p">[</span><span class="s1">'meanly'</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    <span class="n">sd_incomes</span> <span class="o">=</span> <span class="mf">1.72</span>
-    <span class="n">T</span><span class="p">,</span><span class="n">I</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mean_incomes_t</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">unobs</span><span class="p">)</span>
-    <span class="n">O_t</span><span class="p">,</span><span class="n">O_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-    <span class="n">income_random_i</span> <span class="o">=</span> <span class="n">unobs</span><span class="p">[</span><span class="s1">'income'</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    <span class="n">income_ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="n">mean_incomes_t</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">+</span> <span class="n">sd_incomes</span> <span class="o">*</span> <span class="n">income_random_i</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">year_ti</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1971</span><span class="p">,</span><span class="mi">1991</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">+</span><span class="n">O_i</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">weights_ti</span> <span class="o">=</span> <span class="p">(</span><span class="n">O_t</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">unobs</span><span class="p">[</span><span class="s1">'weight'</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">/</span><span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">nodes_ti_k</span> <span class="o">=</span> <span class="p">(</span><span class="n">O_t</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">unobs</span><span class="p">[</span> <span class="p">[</span><span class="s1">'const'</span><span class="p">,</span><span class="s1">'hpwt'</span><span class="p">,</span><span class="s1">'air'</span><span class="p">,</span><span class="s1">'mpd'</span><span class="p">,</span><span class="s1">'space'</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="kc">None</span><span class="p">,:,:])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">T</span><span class="o">*</span><span class="n">I</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">agent_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-    <span class="n">agent_data</span><span class="p">[</span> <span class="p">[</span><span class="s1">'market_ids'</span><span class="p">,</span><span class="s1">'weights'</span><span class="p">]</span><span class="o">+</span> <span class="p">[</span><span class="s1">'nodes'</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">'income'</span><span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([[</span><span class="n">year_ti</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span><span class="n">weights_ti</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span><span class="n">nodes_ti_k</span><span class="p">,</span><span class="n">income_ti</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span> <span class="p">]])</span>
-    <span class="n">agent_data</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">]</span><span class="o">=</span><span class="n">agent_data</span><span class="p">[</span><span class="s1">'market_ids'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> 
+    <span class="n">X1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">p_ty</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">]</span> <span class="c1"># Full Matrix of Systematic Characteristics (Phi)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">X1</span> <span class="o">@</span> <span class="n">true_beta</span> <span class="o">+</span> <span class="n">xi</span> <span class="c1">#  Mean Utility</span>
+    <span class="n">delta_m</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">p_m</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">p_ty</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">shares</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span>
 
-    <span class="c1"># check consistency with pyblp</span>
-    <span class="k">if</span> <span class="n">check_pyblp_compatibility</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">pyblp</span>
-        <span class="c1"># check if product data coincide</span>
-        <span class="n">product_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">pyblp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">BLP_PRODUCTS_LOCATION</span><span class="p">)</span>
-        <span class="n">list_problems</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">thecol</span> <span class="ow">in</span> <span class="n">product_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">prods</span><span class="p">[</span><span class="n">thecol</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">'coerce'</span><span class="p">)</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                <span class="n">same</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">product_data</span><span class="p">[</span><span class="n">thecol</span><span class="p">]</span><span class="o">-</span><span class="n">prods</span><span class="p">[</span><span class="n">thecol</span><span class="p">])</span>  <span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1e-5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">product_data</span><span class="p">[</span><span class="n">thecol</span><span class="p">]</span><span class="o">+</span><span class="n">prods</span><span class="p">[</span><span class="n">thecol</span><span class="p">])</span> <span class="p">)</span> <span class="o">.</span><span class="n">all</span><span class="p">()</span>  
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">same</span> <span class="o">=</span> <span class="p">(</span><span class="n">product_data</span><span class="p">[</span><span class="n">thecol</span><span class="p">]</span><span class="o">==</span> <span class="n">prods</span><span class="p">[</span><span class="n">thecol</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">same</span><span class="p">:</span>
-                <span class="n">list_problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thecol</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">list_problems</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"Discrepancy in product data with pyblp for the following variables: "</span><span class="o">+</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_problems</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"Product data matches pyblp."</span><span class="p">)</span>
-        
-        <span class="c1"># now check if agent data coincide</span>
-        <span class="n">agent_data_pyblp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">pyblp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">BLP_AGENTS_LOCATION</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">agent_data</span> <span class="o">-</span> <span class="n">agent_data_pyblp</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&gt;</span><span class="mf">1e-10</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'*** Problem ***. Agent data does not match pyblp.'</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'Agent data matches pyblp.'</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+        <span class="n">mu_t</span> <span class="o">=</span> <span class="n">true_sigma</span> <span class="o">*</span> <span class="n">p_m</span><span class="p">[</span><span class="n">t</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nu_i</span><span class="o">.</span><span class="n">T</span> <span class="c1"># Idiosyncratic Utility (mu_tiy)</span>
+        <span class="n">u_t</span> <span class="o">=</span> <span class="n">delta_m</span><span class="p">[</span><span class="n">t</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">mu_t</span> <span class="c1"># Total Utility (U_tiy)</span>
+        <span class="n">exp_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">u_t</span><span class="p">)</span> <span class="c1"># Logit Probabilities (Integration)</span>
+        <span class="n">denom</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">exp_u</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">exp_u</span> <span class="o">/</span> <span class="n">denom</span>
+        <span class="n">shares</span><span class="p">[</span><span class="n">t</span><span class="o">*</span><span class="n">Y</span> <span class="p">:</span> <span class="p">(</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Y</span><span class="p">]</span> <span class="o">=</span> <span class="n">probs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Market Shares (Pi_hat)</span>
 
-    <span class="k">return</span> <span class="n">prods</span><span class="p">,</span><span class="n">agent_data</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">shares</span> <span class="o">=</span> <span class="n">shares</span>
+
+    <span class="c1"># Full Instrument Matrix (Zeta)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">instr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">,</span> <span class="n">cost_shifter</span><span class="p">]</span> <span class="c1"># Includes Exogenous X (Phi^x) and Cost Shifter</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">true_beta</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">true_sigma</span> <span class="o">=</span> <span class="n">true_beta</span><span class="p">,</span> <span class="n">true_sigma</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">nu_i</span> <span class="o">=</span> <span class="n">nu_i</span>
+
+    <span class="k">return</span> <span class="n">db</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">tst1</span><span class="p">,</span><span class="n">tst2</span><span class="o">=</span> <span class="n">load_blp_car_data</span><span class="p">()</span>
-<span class="n">tst1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>name</th>
-<th>car_ids</th>
-<th>market_ids</th>
-<th>cy</th>
-<th>dr</th>
-<th>at</th>
-<th>ps</th>
-<th>air</th>
-<th>drv</th>
-<th>prices</th>
-<th>...</th>
-<th>supply_instruments2</th>
-<th>supply_instruments3</th>
-<th>supply_instruments4</th>
-<th>supply_instruments5</th>
-<th>supply_instruments6</th>
-<th>supply_instruments7</th>
-<th>supply_instruments8</th>
-<th>supply_instruments9</th>
-<th>supply_instruments10</th>
-<th>supply_instruments11</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>AMGREM</td>
-<td>129</td>
-<td>1971</td>
-<td>6</td>
-<td>2</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>-9</td>
-<td>4.935802</td>
-<td>...</td>
-<td>0.0</td>
-<td>1.705933</td>
-<td>1.595656</td>
-<td>87.0</td>
-<td>-61.959985</td>
-<td>0.0</td>
-<td>46.060389</td>
-<td>29.786989</td>
-<td>0</td>
-<td>1.888146</td>
-</tr>
-<tr>
-<th>1</th>
-<td>AMHORN</td>
-<td>130</td>
-<td>1971</td>
-<td>6</td>
-<td>4</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>-9</td>
-<td>5.516049</td>
-<td>...</td>
-<td>0.0</td>
-<td>1.680910</td>
-<td>1.490295</td>
-<td>87.0</td>
-<td>-61.959985</td>
-<td>0.0</td>
-<td>46.060389</td>
-<td>29.786989</td>
-<td>0</td>
-<td>1.935989</td>
-</tr>
-<tr>
-<th>2</th>
-<td>AMJAVL</td>
-<td>132</td>
-<td>1971</td>
-<td>6</td>
-<td>2</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>-9</td>
-<td>7.108642</td>
-<td>...</td>
-<td>0.0</td>
-<td>1.801067</td>
-<td>1.357703</td>
-<td>87.0</td>
-<td>-61.959985</td>
-<td>0.0</td>
-<td>46.060389</td>
-<td>29.786989</td>
-<td>0</td>
-<td>1.716799</td>
-</tr>
-<tr>
-<th>3</th>
-<td>AMMATA</td>
-<td>134</td>
-<td>1971</td>
-<td>6</td>
-<td>4</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>-9</td>
-<td>6.839506</td>
-<td>...</td>
-<td>0.0</td>
-<td>1.818061</td>
-<td>1.261347</td>
-<td>87.0</td>
-<td>-61.959985</td>
-<td>0.0</td>
-<td>46.060389</td>
-<td>29.786989</td>
-<td>0</td>
-<td>1.687871</td>
-</tr>
-<tr>
-<th>4</th>
-<td>AMAMBS</td>
-<td>136</td>
-<td>1971</td>
-<td>6</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>-9</td>
-<td>8.928395</td>
-<td>...</td>
-<td>0.0</td>
-<td>1.933210</td>
-<td>1.237365</td>
-<td>87.0</td>
-<td>-61.959985</td>
-<td>0.0</td>
-<td>46.060389</td>
-<td>29.786989</td>
-<td>0</td>
-<td>1.504286</td>
-</tr>
-</tbody>
-</table>
-<p>5 rows × 52 columns</p>
-</div>
 </div>
 </div>
 </div>
@@ -8007,7 +8129,422 @@ Alfred Galichon, 'math+econ+code' masterclass series. <a href="https://www.math-
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Running-the-method">Running the method<a class="anchor-link" href="#Running-the-method">¶</a></h1><p>to be continued...</p>
+<h1 id="BLP's-Method-on-those-data"><strong>BLP's Method on those data</strong><a class="anchor-link" href="#BLP's-Method-on-those-data">¶</a></h1>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>We first implement auxiliary functions.</p>
+<ul>
+<li><strong><code>eye</code></strong> and <strong><code>rkron</code></strong>: These functions create sparse identity matrices and compute row-wise Kronecker products.</li>
+<li><strong><code>ipfp</code></strong> (Iterative Proportional Fitting Procedure): This is the core contraction mapping (fixed-point iteration) algorithm. It numerically inverts the market share equations, repeatedly adjusting the mean utility until the market shares predicted by the model match the actual observed shares.</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">eye</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_array</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rkron</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_array</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">sp</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">getrow</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">getrow</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ipfp</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">nutau_tiy</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
+    <span class="n">nutau_t_i_y</span> <span class="o">=</span> <span class="n">nutau_tiy</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">db</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">pihat_t_y</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">shares</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">db</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">U_t_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">db</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Y</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxiter</span><span class="p">):</span>
+        <span class="n">max_t_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">((</span><span class="n">U_t_y</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">nutau_t_i_y</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">exp_t_i_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">U_t_y</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">nutau_t_i_y</span> <span class="o">-</span> <span class="n">max_t_i</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span>
+        <span class="n">u_t_i</span> <span class="o">=</span> <span class="n">max_t_i</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">max_t_i</span><span class="p">)</span> <span class="o">+</span> <span class="n">exp_t_i_y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">max_t_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">nutau_t_i_y</span> <span class="o">-</span> <span class="n">u_t_i</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">exp_t_i_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">nutau_t_i_y</span> <span class="o">-</span> <span class="n">u_t_i</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">max_t_y</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">Uprime_t_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">I</span> <span class="o">*</span> <span class="n">pihat_t_y</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">max_t_y</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">exp_t_i_y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">U_t_y</span> <span class="o">-</span> <span class="n">Uprime_t_y</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">U_t_y</span> <span class="o">=</span> <span class="n">Uprime_t_y</span>
+    <span class="k">return</span> <span class="n">U_t_y</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">u_t_i</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Next:</p>
+<ul>
+<li><strong><code>F_objective</code></strong>: This is the GMM objective function that the solver tries to minimize. It takes the nonlinear parameter ($\theta$), uses <code>ipfp</code> to find the mean utility, analytically "concentrates out" the linear parameters via IV projection, and computes the final objective value based on the structural error ($\xi$).</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">F_objective</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">tau_m</span> <span class="o">=</span> <span class="n">theta</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># 1. Invert shares to get mean utility (delta)</span>
+    <span class="n">nutau_tiy</span> <span class="o">=</span> <span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">nu_tiy_m</span> <span class="o">@</span> <span class="n">tau_m</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">delta</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ipfp</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">nutau_tiy</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># 2. X_full combines Exogenous [Const, X0, X1] and Endogenous [Price]</span>
+    <span class="n">X_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">db</span><span class="o">.</span><span class="n">phix_ty_k</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">phie_ty_k</span><span class="p">]</span>
+    <span class="n">ZZ</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">zeta_ty_d</span>
+
+    <span class="c1"># 3. Weighting Matrix &amp; Projection</span>
+    <span class="k">if</span> <span class="n">W</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">ZZ</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">ZZ</span><span class="p">)</span>
+
+    <span class="n">Pz</span> <span class="o">=</span> <span class="n">ZZ</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">ZZ</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># 4. Concentrate out ALL linear parameters (Beta AND Alpha) via IV</span>
+    <span class="n">linear_params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X_full</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz</span> <span class="o">@</span> <span class="n">X_full</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">X_full</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz</span> <span class="o">@</span> <span class="n">delta</span><span class="p">)</span>
+
+    <span class="c1"># 5. Compute structural error (xi) and GMM objective</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">-</span> <span class="n">X_full</span> <span class="o">@</span> <span class="n">linear_params</span>
+    <span class="n">valF</span> <span class="o">=</span> <span class="p">(</span><span class="n">xi</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz</span> <span class="o">@</span> <span class="n">xi</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">valF</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Finally:</p>
+<ul>
+<li><strong><code>prepare_db_for_solver</code></strong>: This is a data-wrangling function. It takes the raw simulated data generated earlier and reshapes it into the exact mathematical matrices needed for the solver, such as building the full instrument matrix ($\zeta$) and the price-income interaction terms.</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prepare_db_for_solver</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+    <span class="n">T</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">I</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">I</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Ke</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">cost_shifter</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">instr</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">db</span><span class="o">.</span><span class="n">phie_ty_k</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">p_ty</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">phix_ty_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">]</span> <span class="c1"># Include Constant</span>
+
+    <span class="c1"># Add .to_numpy() to avoid Series clashes</span>
+    <span class="n">market_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">df_temp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'market_ids'</span><span class="p">:</span> <span class="n">market_ids</span><span class="p">,</span> <span class="s1">'x0'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">'x1'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]})</span>
+    <span class="n">rival_x0</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_temp</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'market_ids'</span><span class="p">)[</span><span class="s1">'x0'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)</span> <span class="o">-</span> <span class="n">df_temp</span><span class="p">[</span><span class="s1">'x0'</span><span class="p">])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">rival_x1</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_temp</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'market_ids'</span><span class="p">)[</span><span class="s1">'x1'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)</span> <span class="o">-</span> <span class="n">df_temp</span><span class="p">[</span><span class="s1">'x1'</span><span class="p">])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="c1"># Zeta includes Constant, X0, X1, Cost Shifter, and Rival Sums</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">zeta_ty_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">,</span> <span class="n">cost_shifter</span><span class="p">,</span> <span class="n">rival_x0</span><span class="p">,</span> <span class="n">rival_x1</span><span class="p">]</span>
+
+    <span class="n">eta_i</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">nu_i</span>
+    <span class="n">p_m</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">p_ty</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+    <span class="n">p_tiy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">p_m</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">eta_tiy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">eta_i</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Y</span><span class="p">))</span>
+
+    <span class="c1"># Interaction term for Sigma</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">nu_tiy_m</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_tiy</span> <span class="o">*</span> <span class="n">eta_tiy</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span> <span class="n">I</span> <span class="o">*</span> <span class="n">Y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">db</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>We execute the core optimization routine on our synthetic data. Here is exactly what the code is doing step-by-step:</p>
+<ul>
+<li><strong>Data Initialization</strong>: We generate the synthetic market data and format the necessary matrices (like the instruments and characteristics) for the solver.</li>
+<li><strong>Optimization Setup</strong>: We establish an initial guess (<code>theta_init</code>) and set strict search boundaries for our nonlinear parameter to prevent invalid negative values.</li>
+<li><strong>Initial Minimization (Step 1)</strong>: We use the <code>scipy.optimize.minimize</code> function to iteratively search for the preliminary nonlinear parameter ($\hat{\sigma}_1$) that minimizes our baseline GMM objective function.</li>
+<li><strong>Optimal Weighting Matrix Calculation</strong>: We recover the structural residuals ($\xi_1$) using our first-step estimates to compute <code>W_opt</code>, a heteroskedasticity-robust weighting matrix that accounts for the variance of the moments.</li>
+<li><strong>Efficient Minimization (Step 2)</strong>: We run the minimization routine a second time, this time utilizing <code>W_opt</code> in the objective function, to iteratively search for the final, asymptotically efficient nonlinear parameter ($\hat{\sigma}_2$).</li>
+<li><strong>Recovering Linear Parameters</strong>: Once the optimal $\hat{\sigma}_2$ is identified, the algorithm stops. The code then analytically recovers the remaining linear parameters ($\hat{\alpha}$ and $\hat{\beta}$) using a weighted Instrumental Variables (IV) projection, effectively completing the two-step estimation process.</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Run Manual Estimation</span>
+<span class="c1"># ---------------------------------------------------------</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">78</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">generate_standard_blp</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">I</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">78</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">prepare_db_for_solver</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># 1. Initial guess and bounds</span>
+<span class="n">theta_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">])</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="kc">None</span><span class="p">)]</span>
+
+<span class="n">res_step1</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+    <span class="n">F_objective</span><span class="p">,</span>
+    <span class="n">theta_init</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">db</span><span class="p">,),</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">'L-BFGS-B'</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">'gtol'</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">},</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
+<span class="p">)</span>
+
+<span class="n">theta_hat_1</span> <span class="o">=</span> <span class="n">res_step1</span><span class="o">.</span><span class="n">x</span>
+<span class="n">sigma_hat_1</span> <span class="o">=</span> <span class="n">theta_hat_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Step 1 Sigma Hat: </span><span class="si">{</span><span class="n">sigma_hat_1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1">#</span>
+<span class="c1"># We calculate the Optimal Weighting Matrix (W_opt)</span>
+<span class="c1">#</span>
+<span class="c1"># To get W_opt, we need to recover the structural residuals (xi) from Step 1</span>
+<span class="n">nutau</span> <span class="o">=</span> <span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">nu_tiy_m</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">sigma_hat_1</span><span class="p">]]))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">delta_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ipfp</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">nutau</span><span class="p">)</span>
+<span class="n">delta_1</span> <span class="o">=</span> <span class="n">delta_1</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">X_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">db</span><span class="o">.</span><span class="n">phix_ty_k</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">phie_ty_k</span><span class="p">]</span>
+<span class="n">ZZ</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">zeta_ty_d</span>
+
+<span class="c1"># Standard 1-Step W and Pz</span>
+<span class="n">W_initial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">ZZ</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">ZZ</span><span class="p">)</span>
+<span class="n">Pz_initial</span> <span class="o">=</span> <span class="n">ZZ</span> <span class="o">@</span> <span class="n">W_initial</span> <span class="o">@</span> <span class="n">ZZ</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Recover linear parameters and the structural error (xi)</span>
+<span class="n">linear_params_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X_full</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz_initial</span> <span class="o">@</span> <span class="n">X_full</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">X_full</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz_initial</span> <span class="o">@</span> <span class="n">delta_1</span><span class="p">)</span>
+<span class="n">xi_1</span> <span class="o">=</span> <span class="n">delta_1</span> <span class="o">-</span> <span class="n">X_full</span> <span class="o">@</span> <span class="n">linear_params_1</span>
+
+<span class="c1"># Compute the optimal, heteroskedasticity-robust weighting matrix</span>
+<span class="n">Z_times_xi</span> <span class="o">=</span> <span class="n">ZZ</span> <span class="o">*</span> <span class="n">xi_1</span>
+<span class="n">S_matrix</span> <span class="o">=</span> <span class="n">Z_times_xi</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Z_times_xi</span>
+<span class="n">W_opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S_matrix</span><span class="p">)</span>
+
+<span class="c1"># 2. Efficient Estimation (2-Step GMM)</span>
+
+<span class="n">res_step2</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+    <span class="n">F_objective</span><span class="p">,</span>
+    <span class="n">theta_hat_1</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">W_opt</span><span class="p">),</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">'L-BFGS-B'</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">'gtol'</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">},</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
+<span class="p">)</span>
+
+<span class="n">sigma_hat_2</span> <span class="o">=</span> <span class="n">res_step2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Recover final linear parameters using the Step 2 Sigma and W_opt</span>
+<span class="n">nutau_final</span> <span class="o">=</span> <span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">nu_tiy_m</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">sigma_hat_2</span><span class="p">]]))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">delta_final</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ipfp</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">nutau_final</span><span class="p">)</span>
+<span class="n">delta_final</span> <span class="o">=</span> <span class="n">delta_final</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">Pz_opt</span> <span class="o">=</span> <span class="n">ZZ</span> <span class="o">@</span> <span class="n">W_opt</span> <span class="o">@</span> <span class="n">ZZ</span><span class="o">.</span><span class="n">T</span>
+<span class="n">linear_params_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X_full</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz_opt</span> <span class="o">@</span> <span class="n">X_full</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">X_full</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz_opt</span> <span class="o">@</span> <span class="n">delta_final</span><span class="p">)</span>
+
+<span class="n">beta_hat_final</span> <span class="o">=</span> <span class="n">linear_params_final</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">alpha_hat_final</span> <span class="o">=</span> <span class="n">linear_params_final</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="c1"># --</span>
+<span class="c1"># Results</span>
+<span class="c1"># --</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sigma Hat: </span><span class="si">{</span><span class="n">sigma_hat_2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (True: </span><span class="si">{</span><span class="n">db</span><span class="o">.</span><span class="n">true_sigma</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Alpha Hat: </span><span class="si">{</span><span class="n">alpha_hat_final</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (True: </span><span class="si">{</span><span class="n">db</span><span class="o">.</span><span class="n">true_beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Beta Hat : [</span><span class="si">{</span><span class="n">beta_hat_final</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">beta_hat_final</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">beta_hat_final</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">] (True: </span><span class="si">{</span><span class="n">db</span><span class="o">.</span><span class="n">true_beta</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Step 1 Sigma Hat: 1.0245
+Sigma Hat: 1.0273 (True: 1.0)
+Alpha Hat: -1.0166 (True: -1.0)
+Beta Hat : [-1.9880, 1.5179, 0.5025] (True: [-2.   1.5  0.5])
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Comparison-with-PyBLP"><strong>Comparison with PyBLP</strong><a class="anchor-link" href="#Comparison-with-PyBLP">¶</a></h1><h3 id="Estimating-with-PyBLP"><strong>Estimating with PyBLP</strong><a class="anchor-link" href="#Estimating-with-PyBLP">¶</a></h3><p>In this section, we replicate our manual estimation using the <code>pyblp</code> package to verify our results. Here is exactly how the process is structured:</p>
+<ul>
+<li><strong>Formatting DataFrames</strong>: We repackage into Pandas DataFrames (<code>product_data</code> and <code>agent_data</code>), which is the standard format that <code>pyblp</code> requires.</li>
+<li><strong>Computing an Initial Guess</strong>: Before running the nonlinear solver, we compute a preliminary guess for the linear parameters ($\beta$) using a standard Logit IV regression. This helps the optimization algorithm converge faster.</li>
+<li><strong>Setting up the Problem</strong>: We define the  structure of our model using <code>pyblp.Formulation</code>. Because this is a simplified example, we explicitly configure a demand-only model by specifying which characteristics are linear and which are nonlinear.</li>
+<li><strong>Solving the Model</strong>: Finally, we initialize the <code>pyblp.Problem</code> with our data and formulations, and call the <code>.solve()</code> method using our initial guess to retrieve our parameter estimates.</li>
+</ul>
+<p>The structure used later is similar but will include a supply-side specification.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Run PyBLP Estimation</span>
+<span class="c1"># ---------------------------------------------------------</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">78</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">generate_standard_blp</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">I</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">78</span><span class="p">)</span>
+
+<span class="n">T</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">I</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">I</span>
+<span class="n">cost_shifter</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">instr</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># 1. Build the Product DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'market_ids'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">Y</span><span class="p">),</span>
+    <span class="s1">'product_ids'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="n">T</span><span class="p">),</span>
+    <span class="s1">'firm_ids'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">),</span>
+    <span class="s1">'shares'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">shares</span><span class="p">,</span>
+    <span class="s1">'prices'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">p_ty</span><span class="p">,</span>
+    <span class="s1">'x0'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="s1">'x1'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="s1">'demand_instruments0'</span><span class="p">:</span> <span class="n">cost_shifter</span> <span class="c1"># Excluded Instrument</span>
+<span class="p">})</span>
+
+<span class="c1"># Add BLP Instruments (Rival Sums)</span>
+<span class="n">sum_x0</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'market_ids'</span><span class="p">)[</span><span class="s1">'x0'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)</span>
+<span class="n">sum_x1</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'market_ids'</span><span class="p">)[</span><span class="s1">'x1'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'demand_instruments1'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_x0</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">'x0'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'demand_instruments2'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_x1</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">'x1'</span><span class="p">]</span>
+
+<span class="c1"># 2. Build the Agent DataFrame</span>
+<span class="n">agent_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'market_ids'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">I</span><span class="p">),</span>
+    <span class="s1">'weights'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">I</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">I</span><span class="p">),</span>
+    <span class="s1">'nodes0'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">nu_i</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">T</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="c1"># 3. Starting Guess for Beta (Logit IV)</span>
+<span class="n">s0</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'market_ids'</span><span class="p">)[</span><span class="s1">'shares'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)</span>
+<span class="n">y_iv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'shares'</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s0</span><span class="p">)</span>
+
+<span class="n">X_iv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">p_ty</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">]</span>
+<span class="n">Z_iv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Y</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">x_ty</span><span class="p">,</span> <span class="n">cost_shifter</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'demand_instruments1'</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'demand_instruments2'</span><span class="p">]]</span>
+
+<span class="n">Pz</span> <span class="o">=</span> <span class="n">Z_iv</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">Z_iv</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Z_iv</span><span class="p">)</span> <span class="o">@</span> <span class="n">Z_iv</span><span class="o">.</span><span class="n">T</span>
+<span class="n">beta_guess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X_iv</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz</span> <span class="o">@</span> <span class="n">X_iv</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">X_iv</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Pz</span> <span class="o">@</span> <span class="n">y_iv</span><span class="p">)</span>
+
+<span class="c1"># 4. Run PyBLP (Demand Only!)</span>
+<span class="c1"># We use a 2-tuple for formulation to explicitly drop the supply side</span>
+<span class="n">problem</span> <span class="o">=</span> <span class="n">pyblp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">pyblp</span><span class="o">.</span><span class="n">Formulation</span><span class="p">(</span><span class="s1">'1 + prices + x0 + x1'</span><span class="p">),</span>
+     <span class="n">pyblp</span><span class="o">.</span><span class="n">Formulation</span><span class="p">(</span><span class="s1">'0 + prices'</span><span class="p">)),</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">agent_data</span><span class="o">=</span><span class="n">agent_df</span>
+<span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">]),</span>
+    <span class="n">beta</span><span class="o">=</span><span class="n">beta_guess</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">optimization</span><span class="o">=</span><span class="n">pyblp</span><span class="o">.</span><span class="n">Optimization</span><span class="p">(</span><span class="s1">'l-bfgs-b'</span><span class="p">,</span> <span class="p">{</span><span class="s1">'gtol'</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">})</span>
+<span class="p">)</span>
+
+<span class="n">sigma_est</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">alpha_est</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- PyBLP Estimation Results (Demand Only) ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sigma: </span><span class="si">{</span><span class="n">sigma_est</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (True: </span><span class="si">{</span><span class="n">db</span><span class="o">.</span><span class="n">true_sigma</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Alpha: </span><span class="si">{</span><span class="n">alpha_est</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (True: </span><span class="si">{</span><span class="n">db</span><span class="o">.</span><span class="n">true_beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Beta (X0, X1): </span><span class="si">{</span><span class="n">results</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]</span><span class="si">}</span><span class="s2"> (True: </span><span class="si">{</span><span class="n">db</span><span class="o">.</span><span class="n">true_beta</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Constant: </span><span class="si">{</span><span class="n">results</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (True: </span><span class="si">{</span><span class="n">db</span><span class="o">.</span><span class="n">true_beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>--- PyBLP Estimation Results (Demand Only) ---
+Sigma: 1.0273 (True: 1.0)
+Alpha: -1.0166 (True: -1.0)
+Beta (X0, X1): [1.5179154 0.5025084] (True: [1.5 0.5])
+Constant: -1.9880 (True: -2.0)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Our results with the DIY metod and PyBLP are identical.</strong></p>
+<p>The code provided in this section is taken from the <em>DCM</em> and adapted for smooth-running on our example. We just changed tensors with Pandas dataframe that are easier to handle with PyBLP. <strong>Note that Python implementations for other methods presented in the book (and slides) are available at the end of the book.</strong></p>
 </div>
 </div>
 </div>
