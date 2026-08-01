@@ -1,6 +1,6 @@
 # Estimation of a model of finite-horizon dynamic discrete choice  with probit heterogeneity
 # Importing libraries and generating data:
-!pip install gurobipy
+#!pip install gurobipy
 import numpy as np, gurobipy as grb, scipy.sparse as sp
 X,Y,T,K = 5,4,10,3
 I=J= 3 # with a license, take I=J=1000

@@ -1,4 +1,4 @@
-    !pip install sparse
+# !pip install sparse
 import numpy as np, scipy.sparse as sp, sparse as spx
 from types import SimpleNamespace
 #

@@ -1,7 +1,7 @@
 # Constrained choice simulation
 #
 # Importing libraries and generating data:
-!pip install gurobipy
+#!pip install gurobipy
 import numpy as np, gurobipy as grb
 np.random.seed(7)
 I,Y = 100,3
