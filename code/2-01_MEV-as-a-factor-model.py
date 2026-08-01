@@ -4,8 +4,8 @@
 import numpy as np
 #
 np.random.seed(7)
-O = 10000
-X = 10000000
+O = 2000 # 10000
+X = 1000000 # 10000000
 thelambda = .8
 epsilon_o = np.zeros(O)
 epsilonprime_o = np.zeros(O)
