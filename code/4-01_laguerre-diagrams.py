@@ -1,7 +1,10 @@
 # Laguerre diagrams
 #
 # Importing libraries and generating data
-!pip install -U sdot==2024.12.7.1
+#
+# Install separately:
+# python -m pip install sdot==2024.12.7.1
+#
 from sdot import PowerDiagram, optimal_transport_plan, SdotPlan,SumOfDiracs
 import numpy as np
 #
