@@ -46,6 +46,10 @@ python code/1-01_market-share-simulation.py
 
 Replace the filename with the example you wish to execute.
 
+## Testing status
+
+All Python scripts in this directory have been executed successfully in the author's environment. Reproducibility on other systems may depend on package versions, operating system, solver licences, internet access, and available memory.
+
 ## Important notes
 
 - Some optimization examples require **Gurobi** and a valid Gurobi licence.
