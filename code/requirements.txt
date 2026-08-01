@@ -1,0 +1,19 @@
+# Core scientific Python stack
+numpy>=1.26
+scipy>=1.11
+pandas>=2.1
+matplotlib>=3.8
+
+# Econometrics and machine learning
+statsmodels>=0.14
+scikit-learn>=1.4
+
+# Dynamic discrete-choice examples
+torch>=2.2
+
+# Optimization examples
+# Gurobi requires a separate license; see https://www.gurobi.com/
+gurobipy>=11.0
+
+# Laguerre-diagram example (4-01)
+sdot==2024.12.7.1
