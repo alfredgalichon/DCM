@@ -8,6 +8,7 @@ sparse>=0.15
 # Econometrics and machine learning
 statsmodels>=0.14
 scikit-learn>=1.4
+pyblp>=1.1
 
 # Dynamic discrete-choice examples
 torch>=2.2

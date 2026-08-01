@@ -119,7 +119,7 @@ These examples provide a useful introduction to several major themes of the book
 ### Chapter 6 — Dynamic discrete choice
 
 - [`6-01_ddc-nohet-finite-lp.py`](6-01_ddc-nohet-finite-lp.py) — requires Gurobi
-- [`6-02_ddc-nohet-finite-bwd-fwd-induc.py`](6-02_ddc-nohet-finite-bwd-fwd-induc.py)
+- [`6-02_ddc-nohet-finite-bwd-fwd-induc.py`](6-02_ddc-nohet-finite-bwd-fwd-induc.py) — requires Gurobi
 - [`6-03_ddc-logit-finite-estimation-numpy.py`](6-03_ddc-logit-finite-estimation-numpy.py)
 - [`6-04_ddc-logit-finite-estimation-torch.py`](6-04_ddc-logit-finite-estimation-torch.py) — requires PyTorch
 - [`6-05_ddc-logit-infinite-estimation-nfpx.py`](6-05_ddc-logit-infinite-estimation-nfpx.py)
@@ -131,15 +131,15 @@ These examples provide a useful introduction to several major themes of the book
 ### Chapter 7 — Constrained choice and allocation
 
 - [`7-01_constrained-logit.py`](7-01_constrained-logit.py)
-- [`7-02_code-simulation-constrained-choice.py`](7-02_code-simulation-constrained-choice.py)
-- [`7-03_code-classes-of-constrained-choice.py`](7-03_code-classes-of-constrained-choice.py)
-- [`7-04_code-deferred-acceptance.py`](7-04_code-deferred-acceptance.py)
+- [`7-02_code-simulation-constrained-choice.py`](7-02_code-simulation-constrained-choice.py) — requires Gurobi
+- [`7-03_code-classes-of-constrained-choice.py`](7-03_code-classes-of-constrained-choice.py) — requires Gurobi
+- [`7-04_code-deferred-acceptance.py`](7-04_code-deferred-acceptance.py) — requires Gurobi
 
 ### Chapter 8 — Matching models
 
 - [`8-01_matching-models-general.py`](8-01_matching-models-general.py)
-- [`8-02_matching-models-probit.py`](8-02_matching-models-probit.py)
-- [`8-03_ddc-estimation-simulation-finite.py`](8-03_ddc-estimation-simulation-finite.py)
+- [`8-02_matching-models-probit.py`](8-02_matching-models-probit.py) — requires Gurobi
+- [`8-03_ddc-estimation-simulation-finite.py`](8-03_ddc-estimation-simulation-finite.py) — requires Gurobi
 
 ## Checking syntax
 
