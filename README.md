@@ -1,6 +1,6 @@
 # Discrete Choice Models — Open Companion Materials
 
-This repository provides computational and teaching materials accompanying Alfred Galichon’s book *Discrete Choice Models*, published by Princeton University Press (2026).
+The repository provides a tested computational companion to Alfred Galichon’s book *Discrete Choice Models*, published by Princeton University Press (2026), including Python code, simulations, empirical examples, notebooks, and teaching slides.
 
 ## Contents
 
